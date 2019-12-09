@@ -20,11 +20,11 @@ namespace Readdit.Models
 
             public Boolean isAdmin { get; set; }
 
-        [   NotMapped]
+            [NotMapped]
             [Display(Name = "Full Name")]
             public string FullName => $"{FirstName} {LastName}";
             public List<UserBook> userBooks { get; set; }
-            public List<Wishlist> wishlists { get; set; }
-            public List<Opinion> Opinion { get; set; }
+            //public List<Wishlist> wishlists { get; set; }
+            //public List<Opinion> Opinion { get; set; }
         }
 }
