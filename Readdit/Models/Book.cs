@@ -4,9 +4,10 @@ namespace Readdit.Models
 {
     public class Book
     {
-        public int id { get; set; }
+        [Key]
+        public int BookId { get; set; }
 
-        public int? GoodreadsId { get; set; }
+        public string GoodreadsId { get; set; }
 
         [Required]
         public string Title { get; set; }

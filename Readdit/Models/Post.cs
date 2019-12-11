@@ -7,7 +7,8 @@ namespace Readdit.Models
 {
     public class Post
     {
-        public int id { get; set; }
+        [Key]
+        public int PostId { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
@@ -18,10 +19,14 @@ namespace Readdit.Models
         public string Title { get; set; }
         [Required]
         public string Message { get; set; }
+
+        [Required]
         public string UserId { get; set; }
+        [Required]
         public ApplicationUser User { get; set; }
         public virtual Forum Forum { get; set; }
-        public virtual IEnumerable<PostReply> Replies { get; set; }
-        public ICollection<PostLike> PostLikes { get; set; }
+        public int ForumId { get; set; }
+        public virtual IEnumerable<PostReply> PostReplies { get; set; }
+        //public ICollection<PostLike> PostLikes { get; set; }
     }
 }

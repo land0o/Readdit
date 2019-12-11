@@ -15,10 +15,8 @@ namespace Readdit.Data
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Book> Books { get; set; }
         public DbSet<Forum> Forums { get; set; }
-        public DbSet<ForumLike> ForumLikes { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<PostReply> Replies { get; set; }
-        public DbSet<PostLike> PostLikes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,6 +30,22 @@ namespace Readdit.Data
             modelBuilder.Entity<Post>()
                 .Property(b => b.DateCreated)
                 .HasDefaultValueSql("GETDATE()");
+
+            modelBuilder.Entity<PostReply>()
+                .Property(b => b.DateCreated)
+                .HasDefaultValueSql("GETDATE()");
+
+            // Restrict deletion of related post when Forum entry is removed
+            modelBuilder.Entity<Forum>()
+                .HasMany(p => p.Posts)
+                .WithOne(f => f.Forum)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            // Restrict deletion of related replies when post entry is removed
+            modelBuilder.Entity<Post>()
+                .HasMany(pr => pr.PostReplies)
+                .WithOne(p => p.Post)
+                .OnDelete(DeleteBehavior.Restrict);
 
             // Create a new user for Identity Framework
             ApplicationUser user = new ApplicationUser
@@ -51,7 +65,8 @@ namespace Readdit.Data
             user.PasswordHash = passwordHash.HashPassword(user, "Admin8*");
             modelBuilder.Entity<ApplicationUser>().HasData(user);
 
-            );
         }
+
+        public DbSet<Readdit.Models.User> User { get; set; }
     }
 }

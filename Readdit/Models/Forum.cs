@@ -7,7 +7,8 @@ namespace Readdit.Models
 {
     public class Forum
     {
-        public int id { get; set; }
+        [Key]
+        public int ForumId { get; set; }
 
         [Required]
         [DataType(DataType.Date)]
@@ -19,9 +20,12 @@ namespace Readdit.Models
 
         [Required]
         public string Description { get; set; }
+
+        [Required]
         public string UserId { get; set; }
+        [Required]
         public ApplicationUser User { get; set; }
-        public ICollection<ForumLike> ForumLikes { get; set; }
+        //public ICollection<ForumLike> ForumLikes { get; set; }
         public ICollection<Post> Posts { get; set; }
     }
 }

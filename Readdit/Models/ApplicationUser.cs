@@ -28,5 +28,6 @@ namespace Readdit.Models
             public ICollection<Book> Books { get; set; }
             public ICollection<Forum> Forums { get; set; }
             public ICollection<Post> Posts { get; set; }
+            public ICollection<PostReply> PostReplies { get; set; }
     }
 }
