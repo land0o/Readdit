@@ -18,13 +18,15 @@ namespace Readdit.Models
             [Display(Name = "Surname")]
             public string LastName { get; set; }
 
-            public Boolean isAdmin { get; set; }
+            public string imageUrl { get; set; }
+
+            public bool isAdmin { get; set; }
 
             [NotMapped]
             [Display(Name = "Full Name")]
             public string FullName => $"{FirstName} {LastName}";
-            public List<UserBook> userBooks { get; set; }
-            //public List<Wishlist> wishlists { get; set; }
-            //public List<Opinion> Opinion { get; set; }
-        }
+            public ICollection<Book> Books { get; set; }
+            public ICollection<Forum> Forums { get; set; }
+        //public ICollection<Opinion> Opinion { get; set; }
+    }
 }
