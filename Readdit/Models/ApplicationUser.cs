@@ -27,6 +27,6 @@ namespace Readdit.Models
             public string FullName => $"{FirstName} {LastName}";
             public ICollection<Book> Books { get; set; }
             public ICollection<Forum> Forums { get; set; }
-        //public ICollection<Opinion> Opinion { get; set; }
+            public ICollection<Post> Posts { get; set; }
     }
 }

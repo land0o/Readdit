@@ -6,7 +6,7 @@ namespace Readdit.Models
     {
         public int id { get; set; }
 
-        public int GoodreadsId { get; set; }
+        public int? GoodreadsId { get; set; }
 
         [Required]
         public string Title { get; set; }
@@ -23,8 +23,10 @@ namespace Readdit.Models
         public bool IsOwned { get; set; }
         public bool IsWish { get; set; }
 
+        [Required]
         public string UserId { get; set; }
 
+        [Required]
         public ApplicationUser User { get; set; }
     }
 }
