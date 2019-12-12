@@ -18,6 +18,13 @@ namespace Readdit.Models
             [Display(Name = "Surname")]
             public string LastName { get; set; }
 
+            [Display(Name = "About me")]
+            [MaxLength(75)]
+            public string Description { get; set; }
+
+            [Display(Name = "City")]
+            public string City { get; set; }
+
             public string imageUrl { get; set; }
 
             public bool isAdmin { get; set; }

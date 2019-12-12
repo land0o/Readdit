@@ -81,6 +81,9 @@ namespace Bangazon.Controllers
             //removed bind and only passing the info needed to update the db 
             user.FirstName = applicationUser.FirstName;
             user.LastName = applicationUser.LastName;
+            user.Description = applicationUser.Description;
+            user.City = applicationUser.City;
+            user.imageUrl = applicationUser.imageUrl;
             user.Email = applicationUser.Email;
 
 

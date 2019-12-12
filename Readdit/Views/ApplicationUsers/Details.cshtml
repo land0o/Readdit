@@ -6,38 +6,55 @@
 
 <h1>My Profile</h1>
 
-<div>
-    <h4>User Info</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.imageUrl)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.imageUrl)
-        </dd>
-    </dl>
+<div style="text-align:center;">
+    <div class="card" style="width: 25rem;">
+        <img src="@Html.DisplayFor(model => model.imageUrl)" class="card-img-top" alt="@Html.DisplayNameFor(model => model.imageUrl)">
+        <div class="card-body">
+            <h5 class="">@Html.DisplayNameFor(model => model.Description)</h5>
+            <p class="card-text"> @Html.DisplayFor(model => model.Description)</p>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">@Html.DisplayNameFor(model => model.FullName): @Html.DisplayFor(model => model.FullName)</li>
+            <li class="list-group-item">@Html.DisplayNameFor(model => model.Email): @Html.DisplayFor(model => model.Email)</li>
+            <li class="list-group-item">@Html.DisplayNameFor(model => model.City): @Html.DisplayFor(model => model.City)</li>
+        </ul>
+        <div class="card-body">
+            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+            <a asp-controller="" asp-action="Index"> Books</a> |
+            <a asp-controller="" asp-action="Index">Forum History</a>
+        </div>
+    </div>
+    @*<h4>User Info</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.FirstName)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.FirstName)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.LastName)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.LastName)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Email)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Email)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.imageUrl)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.imageUrl)
+            </dd>
+        </dl>*@
 </div>
-<div>
+@*<div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-controller="" asp-action="Index"> Books</a> |
     <a asp-controller="" asp-action="Index">Forum History</a>
-</div>
+</div>*@
