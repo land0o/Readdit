@@ -8,7 +8,7 @@
 
 <div style="text-align:center;">
     <div class="card" style="width: 25rem;">
-        <img src="@Html.DisplayFor(model => model.imageUrl)" class="card-img-top" alt="@Html.DisplayNameFor(model => model.imageUrl)">
+        <img src="~/Images/@Model.imageUrl" class="card-img-top" alt="@Html.DisplayNameFor(model => model.imageUrl)">
         <div class="card-body">
             <h5 class="">@Html.DisplayNameFor(model => model.Description)</h5>
             <p class="card-text"> @Html.DisplayFor(model => model.Description)</p>

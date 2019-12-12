@@ -19,7 +19,7 @@ namespace Readdit.Models
             public string LastName { get; set; }
 
             [Display(Name = "About me")]
-            [MaxLength(75)]
+            [MaxLength(75, ErrorMessage ="Description can not contain more than 75 characters")]
             public string Description { get; set; }
 
             [Display(Name = "City")]

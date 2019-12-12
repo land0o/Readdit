@@ -6,6 +6,10 @@ using Readdit.Data;
 using Readdit.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Readdit.Models.AppUserViewModel;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using System;
 
 namespace Bangazon.Controllers
 {
@@ -15,12 +19,14 @@ namespace Bangazon.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IWebHostEnvironment _hostingEnvironment;
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-        public ApplicationUsersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public ApplicationUsersController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IWebHostEnvironment environment)
         {
             _userManager = userManager;
             _context = context;
+            _hostingEnvironment = environment;
         }
 
         //admin will need a view to get all users 
@@ -55,12 +61,17 @@ namespace Bangazon.Controllers
         // GET: Users/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var UserViewModel = new UserImageViewModel()
+            {
+                User = user
+            };
+
             if (id == null)
             {
                 return NotFound();
             }
 
-            var user = await _userManager.GetUserAsync(HttpContext.User);
 
             user.Id = id;
 
@@ -68,23 +79,23 @@ namespace Bangazon.Controllers
             {
                 return NotFound();
             }
-            return View(user);
+            return View(UserViewModel);
         }
 
         // POST: Users/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, ApplicationUser applicationUser)
+        public async Task<IActionResult> Edit(string id, UserImageViewModel UserViewModel)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
             //removed bind and only passing the info needed to update the db 
-            user.FirstName = applicationUser.FirstName;
-            user.LastName = applicationUser.LastName;
-            user.Description = applicationUser.Description;
-            user.City = applicationUser.City;
-            user.imageUrl = applicationUser.imageUrl;
-            user.Email = applicationUser.Email;
+            user.FirstName = UserViewModel.User.FirstName;
+            user.LastName = UserViewModel.User.LastName;
+            user.Description = UserViewModel.User.Description;
+            user.City = UserViewModel.User.City;
+            user.imageUrl = UserViewModel.User.imageUrl;
+            user.Email = UserViewModel.User.Email;
 
 
             if (id != user.Id)
@@ -95,17 +106,42 @@ namespace Bangazon.Controllers
             {
                 try
                 {
-                    //
-                    // Summary:
-                    //     Updates the specified user in the backing store.
-                    //
-                    // Parameters:
-                    //   user:
-                    //     The user to update.
-                    //
-                    // Returns:
-                    //     The System.Threading.Tasks.Task that represents the asynchronous operation, containing
-                    //     the Microsoft.AspNetCore.Identity.IdentityResult of the operation.
+                    var CurrentFileName = UserViewModel.User.imageUrl;
+                    // check if the user added an image to save OR if the image added is different from the current one saved
+                    if (UserViewModel.image != null || UserViewModel.image.FileName != CurrentFileName)
+                    {
+                        // get all of the images currently saved
+                        var getAllImages = Directory.GetFiles("wwwroot/Images");
+                        // if the current file name is not null
+                        if (CurrentFileName != null)
+                        {
+                            // find the file to delete and store it in a variable
+                            var fileToDelete = getAllImages.First(i => i.Contains(CurrentFileName));
+                            // delete it 
+                            System.IO.File.Delete(fileToDelete);
+                        }
+                        var UniqueFileName = GetUniqueFileName(UserViewModel.image.FileName);
+                        var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "Images");
+                        var filePath = Path.Combine(uploads, UniqueFileName);
+                        using (var myFile = new FileStream(filePath, FileMode.Create))
+                        {
+                            UserViewModel.image.CopyTo(myFile);
+                        }
+                        user.imageUrl = UniqueFileName;
+                    }
+                    //else if()
+                    //{
+                    //    var UniqueFileName = GetUniqueFileName(UserViewModel.image.FileName);
+                    //    var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "Images");
+                    //    var filePath = Path.Combine(uploads, UniqueFileName);
+                    //    using (var myFile = new FileStream(filePath, FileMode.Create))
+                    //    {
+                    //        UserViewModel.image.CopyTo(myFile);
+                    //    }
+                    //    user.imageUrl = UniqueFileName;
+                    //}
+                    //UserViewModel.image == null
+
                     IdentityResult result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
                         return RedirectToAction(nameof(Details));
@@ -165,6 +201,14 @@ namespace Bangazon.Controllers
         private bool UserExists(string id)
         {
             return _context.ApplicationUsers.Any(e => e.Id == id);
+        }
+        private string GetUniqueFileName(string fileName)
+        {
+            fileName = Path.GetFileName(fileName);
+            return Path.GetFileNameWithoutExtension(fileName)
+                      + "_"
+                      + Guid.NewGuid().ToString().Substring(0, 4)
+                      + Path.GetExtension(fileName);
         }
     }
 }
