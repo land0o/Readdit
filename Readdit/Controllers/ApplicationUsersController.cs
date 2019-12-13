@@ -47,10 +47,11 @@ namespace Bangazon.Controllers
         //}
 
         // GET: Users/Details/5
-        public async Task<IActionResult> Details()
+        public async Task<IActionResult> Details(string id)
         {
+            //ViewBag.LoggedInUser = await _userManager.FindByIdAsync(id);
 
-            var user = await _userManager.GetUserAsync(HttpContext.User);
+            var user = await _userManager.FindByIdAsync(id);
             if (user == null)
             {
                 return NotFound();
@@ -97,7 +98,7 @@ namespace Bangazon.Controllers
             user.imageUrl = UserViewModel.User.imageUrl;
             user.Email = UserViewModel.User.Email;
 
-
+            //bug can not edit if an image is not uploaded need to grab the currentImage or move imageDelete lower
             if (id != user.Id)
             {
                 return NotFound();
@@ -129,18 +130,6 @@ namespace Bangazon.Controllers
                         }
                         user.imageUrl = UniqueFileName;
                     }
-                    //else if()
-                    //{
-                    //    var UniqueFileName = GetUniqueFileName(UserViewModel.image.FileName);
-                    //    var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "Images");
-                    //    var filePath = Path.Combine(uploads, UniqueFileName);
-                    //    using (var myFile = new FileStream(filePath, FileMode.Create))
-                    //    {
-                    //        UserViewModel.image.CopyTo(myFile);
-                    //    }
-                    //    user.imageUrl = UniqueFileName;
-                    //}
-                    //UserViewModel.image == null
 
                     IdentityResult result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)

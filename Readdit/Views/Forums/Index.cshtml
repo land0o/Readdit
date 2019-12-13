@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<Readdit.Models.Forum>
 
+
 @{
     ViewData["Title"] = "Index";
 }
@@ -28,26 +29,44 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateCreated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Id)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ForumId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ForumId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ForumId">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateCreated)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <a asp-controller="ApplicationUsers" asp-action="Details" asp-route-id="@item.User.Id">
+                        @Html.DisplayFor(modelItem => item.User.FullName)
+                    </a>
+                </td>
+                <td>
+                    @if (item.UserId == @ViewBag.CreatedUserId)
+                    {
+                    <div>
+                        <a asp-action="Edit" asp-route-id="@item.ForumId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.ForumId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ForumId">Delete</a>
+                    </div>
+                    }
+                    else
+                    {
+                       <div>
+                        <a asp-action="Details" asp-route-id="@item.ForumId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ForumId">Delete</a>
+                       </div>         
+                    }
+                    
+                    
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+

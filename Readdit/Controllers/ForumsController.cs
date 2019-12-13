@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,15 +14,21 @@ namespace Readdit.Controllers
     public class ForumsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-        public ForumsController(ApplicationDbContext context)
+        public ForumsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _context = context;
         }
 
-        // GET: Forums
+        // GET: All Forums created by users
         public async Task<IActionResult> Index()
         {
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            ViewBag.CreatedUserId = currentUser.Id;
             var applicationDbContext = _context.Forums.Include(f => f.User);
             return View(await applicationDbContext.ToListAsync());
         }
@@ -48,7 +55,7 @@ namespace Readdit.Controllers
         // GET: Forums/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
+            //ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
             return View();
         }
 
@@ -57,15 +64,20 @@ namespace Readdit.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ForumId,DateCreated,Title,Description,UserId")] Forum forum)
+        public async Task<IActionResult> Create(Forum forum)
         {
+            ModelState.Remove("UserId");
+            ModelState.Remove("User");
+           // ModelState.Remove("Forum.User");
             if (ModelState.IsValid)
             {
+                var user = await _userManager.GetUserAsync(HttpContext.User);
+                forum.UserId = user.Id;
                 _context.Add(forum);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", forum.UserId);
+            //ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", forum.UserId);
             return View(forum);
         }
 
@@ -82,7 +94,7 @@ namespace Readdit.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", forum.UserId);
+            //ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", forum.UserId);
             return View(forum);
         }
 
@@ -91,34 +103,46 @@ namespace Readdit.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ForumId,DateCreated,Title,Description,UserId")] Forum forum)
+        public async Task<IActionResult> Edit(int id, Forum forum)
         {
+
             if (id != forum.ForumId)
             {
                 return NotFound();
             }
 
+            ModelState.Remove("User");
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            ViewBag.CreatedUserId = currentUser.Id;
             if (ModelState.IsValid)
             {
-                try
+                if (forum.UserId == currentUser.Id)
                 {
-                    _context.Update(forum);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ForumExists(forum.ForumId))
+
+
+                    try
                     {
-                        return NotFound();
+                        _context.Update(forum);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!ForumExists(forum.ForumId))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+
+
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
             }
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", forum.UserId);
+            //ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", forum.UserId);
             return View(forum);
         }
 
