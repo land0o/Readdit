@@ -34,7 +34,6 @@ namespace Readdit.Controllers
             return View(applicationDbContext);
         }
 
-        //search is not capturing input
         public async Task<IActionResult> Search(string SearchString)
         {
             var applicationDbContext = _context.Forums.Where(f => f.Title.ToLower().Contains(SearchString) || f.Description.ToLower().Contains(SearchString));
