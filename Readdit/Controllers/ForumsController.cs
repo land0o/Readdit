@@ -28,7 +28,7 @@ namespace Readdit.Controllers
         {
             var currentUser = await _userManager.GetUserAsync(HttpContext.User);
 
-            ViewBag.CreatedUserId = currentUser.Id;
+            ViewBag.CurentUserId = currentUser.Id;
             var applicationDbContext = _context.Forums.Include(f => f.User);
             return View(await applicationDbContext.ToListAsync());
         }
@@ -36,6 +36,10 @@ namespace Readdit.Controllers
         // GET: Forums/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            ViewBag.CurentUserId = currentUser.Id;
+
             if (id == null)
             {
                 return NotFound();
@@ -114,7 +118,7 @@ namespace Readdit.Controllers
             ModelState.Remove("User");
             var currentUser = await _userManager.GetUserAsync(HttpContext.User);
 
-            ViewBag.CreatedUserId = currentUser.Id;
+            ViewBag.CurentUserId = currentUser.Id;
             if (ModelState.IsValid)
             {
                 if (forum.UserId == currentUser.Id)

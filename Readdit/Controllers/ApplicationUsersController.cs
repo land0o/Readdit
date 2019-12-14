@@ -49,7 +49,9 @@ namespace Bangazon.Controllers
         // GET: Users/Details/5
         public async Task<IActionResult> Details(string id)
         {
-            //ViewBag.LoggedInUser = await _userManager.FindByIdAsync(id);
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            ViewBag.CurentUserId = currentUser.Id;
 
             var user = await _userManager.FindByIdAsync(id);
             if (user == null)

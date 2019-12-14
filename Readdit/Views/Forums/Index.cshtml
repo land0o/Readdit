@@ -5,10 +5,10 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Forums</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Create A New Forum</a>
 </p>
 <table class="table">
     <thead>
@@ -47,7 +47,7 @@
                     </a>
                 </td>
                 <td>
-                    @if (item.UserId == @ViewBag.CreatedUserId)
+                    @if (item.UserId == @ViewBag.CurentUserId)
                     {
                     <div>
                         <a asp-action="Edit" asp-route-id="@item.ForumId">Edit</a> |
@@ -58,12 +58,9 @@
                     else
                     {
                        <div>
-                        <a asp-action="Details" asp-route-id="@item.ForumId">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.ForumId">Delete</a>
+                        @*<a asp-action="Details" asp-route-id="@item.ForumId">Details</a>*@
                        </div>         
                     }
-                    
-                    
                 </td>
             </tr>
         }
