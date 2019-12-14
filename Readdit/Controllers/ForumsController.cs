@@ -32,7 +32,8 @@ namespace Readdit.Controllers
             //need to ask/figure out why it is throwing a null refernce of no user is logged in on forums view from nav
             ViewBag.CurentUserId = currentUser.Id;
 
-            var applicationDbContext = _context.Forums.Include(f => f.User);
+            var applicationDbContext = _context.Forums.Include(f => f.User)
+                                                                            .OrderByDescending(f => f.DateCreated);
             return View(await applicationDbContext.ToListAsync());
         }
 
