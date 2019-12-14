@@ -1,31 +1,70 @@
-﻿@{
+﻿@model IEnumerable<Readdit.Models.Forum>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-    @*<style type="text/css">
+@*<style type="text/css">
         body {
             background-image: url('/Images/photographyEyeglasses-.jpg');
             margin: 0;
             background-repeat: no-repeat;
             background-attachment: fixed;
             background-position: center;
-            background-size: cover; 
+            background-size: cover;
         }
     </style>*@
 
-<div class="text-center" style=" margin-bottom: 45px;" >
-    <h1 style="color: white; 
-    background:#868e96; 
+    <div class="text-center" style=" margin-bottom: 45px;">
+        <h1 style="color: white;
+    background:#868e96;
     border: 2px solid black;
     border-radius: 2%;
-    width:45%; 
-    height:45%; 
-    margin:auto; 
-    font-family: 'Arial, Helvetica, sans-serif'; 
-    font-size: 500%;">Welcome</h1>
-    <img src="~/Images/ReadditLogoNoBgBlue.png" alt="Site Logo" style="height:500px; width: 500px" /> <br />
-    <div>
-        <input type="text" class="form-control" placeholder="Search for a forum by Book Title or Author" aria-label="" aria-describedby="button-addon4">
-        <button class="btn btn-outline-secondary" type="button">Search</button>
+    width:45%;
+    height:45%;
+    margin:auto;
+    font-family: 'Arial, Helvetica, sans-serif';
+    font-size: 500%;">
+            Welcome
+        </h1>
+        <img src="~/Images/ReadditLogoNoBgBlue.png" alt="Site Logo" style="height:500px; width: 500px" /> <br />
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Title)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Description)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DateCreated)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <a href=@Url.Action("Details", "Forums", new { Id = item.ForumId })>@item.Title</a>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateCreated)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Search for a forum by Book Title, Genre, Series or Author"
+                   aria-label="" aria-describedby="button-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+            </div>
+        </div>
     </div>
-</div>

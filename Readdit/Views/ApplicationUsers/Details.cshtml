@@ -18,11 +18,21 @@
             <li class="list-group-item">@Html.DisplayNameFor(model => model.Email): @Html.DisplayFor(model => model.Email)</li>
             <li class="list-group-item">@Html.DisplayNameFor(model => model.City): @Html.DisplayFor(model => model.City)</li>
         </ul>
-        <div class="card-body">
-            <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-            <a asp-controller="" asp-action="Index"> Books</a> |
-            <a asp-controller="" asp-action="Index">Forum History</a>
-        </div>
+        @if (Model.Id == @ViewBag.CurentUserId)
+        {
+            <div class="card-body">
+                <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+                <a asp-controller="" asp-action="Index"> Books</a> |
+                <a asp-controller="" asp-action="Index">Forum History</a>
+            </div>
+        }
+        else
+        {
+            <div class="card-body">
+                <a asp-controller="" asp-action="Index"> Books</a> |
+                <a asp-controller="" asp-action="Index">Forum History</a>
+            </div>
+        }
     </div>
 </div>
 

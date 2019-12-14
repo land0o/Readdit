@@ -5,11 +5,20 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Forums</h1>
+<h1>Book Forums</h1>
 
 <p>
     <a asp-action="Create">Create A New Forum</a>
 </p>
+
+<div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="Search for a forum by Book Title, Genre, Series or Author" 
+           aria-label="" aria-describedby="button-addon2">
+    <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button" id="button-addon2">Search</button>
+    </div>
+</div>
+
 <table class="table">
     <thead>
         <tr>

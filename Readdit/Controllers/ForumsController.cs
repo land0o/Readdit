@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -28,7 +29,9 @@ namespace Readdit.Controllers
         {
             var currentUser = await _userManager.GetUserAsync(HttpContext.User);
 
+            //need to ask/figure out why it is throwing a null refernce of no user is logged in on forums view from nav
             ViewBag.CurentUserId = currentUser.Id;
+
             var applicationDbContext = _context.Forums.Include(f => f.User);
             return View(await applicationDbContext.ToListAsync());
         }
@@ -56,6 +59,7 @@ namespace Readdit.Controllers
             return View(forum);
         }
 
+        [Authorize]
         // GET: Forums/Create
         public IActionResult Create()
         {
@@ -72,7 +76,7 @@ namespace Readdit.Controllers
         {
             ModelState.Remove("UserId");
             ModelState.Remove("User");
-           // ModelState.Remove("Forum.User");
+
             if (ModelState.IsValid)
             {
                 var user = await _userManager.GetUserAsync(HttpContext.User);
