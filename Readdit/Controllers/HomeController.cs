@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Readdit.Data;
 using Readdit.Models;
@@ -31,6 +32,14 @@ namespace Readdit.Controllers
             var applicationDbContext = _context.Forums.OrderByDescending(p => p.DateCreated).Take(5);
 
             return View(applicationDbContext);
+        }
+
+        //search is not capturing input
+        public async Task<IActionResult> Search(string SearchString)
+        {
+            var applicationDbContext = _context.Forums.Where(f => f.Title.ToLower().Contains(SearchString) || f.Description.ToLower().Contains(SearchString));
+
+            return View(await applicationDbContext.ToListAsync());
         }
 
         public IActionResult Privacy()
