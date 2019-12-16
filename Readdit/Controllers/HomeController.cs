@@ -18,7 +18,6 @@ namespace Readdit.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
 
-        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         public HomeController(ILogger<HomeController> logger, UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
@@ -26,13 +25,20 @@ namespace Readdit.Controllers
             _logger = logger;
             _context = context;
         }
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-        public IActionResult Index()
+        public async Task <IActionResult> Index()
         {
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (currentUser != null)
+            {
+                ViewBag.CurentUserId = currentUser.Id;
+            }
 
             var applicationDbContext = _context.Forums.OrderByDescending(p => p.DateCreated).Take(5);
 
-            return View(applicationDbContext);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         public async Task<IActionResult> Search(string SearchString)

@@ -29,8 +29,10 @@ namespace Readdit.Controllers
         {
             var currentUser = await _userManager.GetUserAsync(HttpContext.User);
 
-            //need to ask/figure out why it is throwing a null refernce of no user is logged in on forums view from nav
-            ViewBag.CurentUserId = currentUser.Id;
+            if (currentUser != null)
+            {
+                ViewBag.CurentUserId = currentUser.Id;
+            }
 
             var applicationDbContext = _context.Forums.Include(f => f.User)
                                                                             .OrderByDescending(f => f.DateCreated);
@@ -40,9 +42,13 @@ namespace Readdit.Controllers
         // GET: Forums/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+      
             var currentUser = await _userManager.GetUserAsync(HttpContext.User);
 
-            ViewBag.CurentUserId = currentUser.Id;
+            if (currentUser != null)
+            {
+                ViewBag.CurentUserId = currentUser.Id;
+            }
 
             if (id == null)
             {

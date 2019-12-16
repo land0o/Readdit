@@ -100,7 +100,6 @@ namespace Bangazon.Controllers
             user.imageUrl = UserViewModel.User.imageUrl;
             user.Email = UserViewModel.User.Email;
 
-            //bug can not edit if an image is not uploaded need to grab the currentImage or move imageDelete lower
             if (id != user.Id)
             {
                 return NotFound();
