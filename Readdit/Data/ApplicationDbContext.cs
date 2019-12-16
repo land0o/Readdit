@@ -67,6 +67,5 @@ namespace Readdit.Data
 
         }
 
-        public DbSet<Readdit.Models.User> User { get; set; }
     }
 }
