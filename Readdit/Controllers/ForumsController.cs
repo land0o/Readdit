@@ -57,7 +57,17 @@ namespace Readdit.Controllers
 
             var forum = await _context.Forums
                 .Include(f => f.User)
+                .Include(f => f.Posts)
                 .FirstOrDefaultAsync(m => m.ForumId == id);
+
+            var post = await _context.Posts.Where(post => post.PostId == id)
+                .Include(post => post.User)
+                .Include(post => post.Forum)
+                .Include(post => post.PostReplies)
+                                .ThenInclude(reply => reply.User)
+                .FirstOrDefaultAsync(m => m.PostId == id);
+
+
             if (forum == null)
             {
                 return NotFound();
