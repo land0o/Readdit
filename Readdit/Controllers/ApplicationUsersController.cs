@@ -110,20 +110,18 @@ namespace Bangazon.Controllers
                 try
                 {
                     var CurrentFileName = UserViewModel.User.imageUrl;
-                    // check if the user added an image to save OR if the image added is different from the current one saved
-                    if (UserViewModel.image != null || UserViewModel.image.FileName != CurrentFileName)
+                    // check if the user added an image to save & if the image added is different from the current one saved & if the current file name is not null
+                    if (UserViewModel.image != null && UserViewModel.image.FileName != CurrentFileName && CurrentFileName != null)
                     {
                         // get all of the images currently saved
                         var getAllImages = Directory.GetFiles("wwwroot/Images");
-                        // if the current file name is not null
-                        if (CurrentFileName != null)
-                        {
-                            // find the file to delete and store it in a variable
-                            var fileToDelete = getAllImages.First(i => i.Contains(CurrentFileName));
-                            // delete it 
-                            System.IO.File.Delete(fileToDelete);
-                        }
+                        // find the file to delete and store it in a variable
+                        var fileToDelete = getAllImages.First(i => i.Contains(CurrentFileName));
+                        // delete it 
+                        System.IO.File.Delete(fileToDelete);
+                        //add's a unique string to the end of the file name
                         var UniqueFileName = GetUniqueFileName(UserViewModel.image.FileName);
+                        //saves the image in the Images folder
                         var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "Images");
                         var filePath = Path.Combine(uploads, UniqueFileName);
                         using (var myFile = new FileStream(filePath, FileMode.Create))
@@ -132,10 +130,19 @@ namespace Bangazon.Controllers
                         }
                         user.imageUrl = UniqueFileName;
                     }
+                    else 
+                    {
+                        user.FirstName = UserViewModel.User.FirstName;
+                        user.LastName = UserViewModel.User.LastName;
+                        user.Description = UserViewModel.User.Description;
+                        user.City = UserViewModel.User.City;
+                        user.Email = UserViewModel.User.Email;
+                    }
 
+                    var UserDetails = UserViewModel.User.Id;
                     IdentityResult result = await _userManager.UpdateAsync(user);
                     if (result.Succeeded)
-                        return RedirectToAction(nameof(Details));
+                    return RedirectToAction("Details", new { id = UserDetails });
                     else
                     {
                         foreach (IdentityError error in result.Errors)
@@ -153,7 +160,8 @@ namespace Bangazon.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Details));
+                var UserDetailId = UserViewModel.User.Id;
+                return RedirectToAction("Details", new { id = UserDetailId });
             }
             return View(user);
         }

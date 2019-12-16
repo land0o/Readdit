@@ -28,7 +28,15 @@
             Welcome
         </h1>
         <img src="~/Images/ReadditLogoNoBgBlue.png" alt="Site Logo" style="height:500px; width: 500px" /> <br />
-
+        <div class="input-group mb-3">
+            <form asp-controller="Home" asp-action="Search" method="get" style="margin:auto;">
+                <div class="input-group-append">
+                    <input type="text" name="SearchString" class="form-control" placeholder="Search for a forum by Book Title, Genre, Series or Author"
+                           aria-label="" aria-describedby="button-addon2" size="55">
+                    <input class="btn btn-outline-secondary" type="submit" value="Search" id="button-addon2" />
+                </div>
+            </form>
+        </div>
         <table class="table">
             <thead>
                 <tr>
@@ -60,13 +68,5 @@
                 }
             </tbody>
         </table>
-        <div class="input-group mb-3">
-            <form asp-controller="Home" asp-action="Search" method="get" style="margin:auto;">
-                <div class="input-group-append">
-                    <input type="text" name="SearchString" class="form-control" placeholder="Search for a forum by Book Title, Genre, Series or Author"
-                           aria-label="" aria-describedby="button-addon2" size="55">
-                    <input class="btn btn-outline-secondary" type="submit" value="Search" id="button-addon2" />
-                </div>
-            </form>
-        </div>
+
     </div>

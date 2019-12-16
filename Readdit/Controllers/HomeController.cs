@@ -29,6 +29,7 @@ namespace Readdit.Controllers
 
         public IActionResult Index()
         {
+
             var applicationDbContext = _context.Forums.OrderByDescending(p => p.DateCreated).Take(5);
 
             return View(applicationDbContext);
