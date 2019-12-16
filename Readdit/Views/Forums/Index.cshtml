@@ -1,0 +1,80 @@
+﻿@model IEnumerable<Readdit.Models.Forum>
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Book Forums</h1>
+
+<p>
+    <a asp-action="Create">Create A New Forum</a>
+</p>
+
+<div class="input-group mb-3">
+    <form asp-controller="Home" asp-action="Search" method="get" >
+        <div class="input-group-append">
+            <input type="text" name="SearchString" class="form-control" placeholder="Search for a forum by Book Title, Genre, Series or Author"
+                   aria-label="" aria-describedby="button-addon2" size="55">
+            <input class="btn btn-outline-secondary" type="submit" value="Search" id="button-addon2" />
+        </div>
+    </form>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateCreated)
+                </td>
+                <td>
+                    <a href=@Url.Action("Details", "Forums", new { Id = item.ForumId })>@item.Title</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <a asp-controller="ApplicationUsers" asp-action="Details" asp-route-id="@item.User.Id">
+                        @Html.DisplayFor(modelItem => item.User.FullName)
+                    </a>
+                </td>
+                <td>
+                    @if (item.UserId == @ViewBag.CurentUserId)
+                    {
+                    <div>
+                        <a asp-action="Edit" asp-route-id="@item.ForumId">Edit</a> |
+                        <a asp-action="Details" asp-route-id="@item.ForumId">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.ForumId">Delete</a>
+                    </div>
+                    }
+                    else
+                    {
+                       <div>
+                        @*<a asp-action="Details" asp-route-id="@item.ForumId">Details</a>*@
+                       </div>         
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

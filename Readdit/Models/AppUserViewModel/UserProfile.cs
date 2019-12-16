@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace Readdit.Models
 {
-    public class User
+    public class UserProfile
     {
         public string UserId { get; set; }
-        public ApplicationUser ApplicationUser { get; set; }
 
         [Required]
         [Display(Name = "First Name")]
