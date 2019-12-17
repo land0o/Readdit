@@ -74,10 +74,12 @@ namespace Readdit.Controllers
         }
 
         // GET: Posts/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(int forumid)
         {
-            ViewData["ForumId"] = new SelectList(_context.Forums, "ForumId", "Description");
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+
+            ViewData["ForumId"] = forumid;
+            ViewData["UserId"] = user.Id;
             return View();
         }
 
@@ -86,18 +88,23 @@ namespace Readdit.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PostId,DateCreated,Title,Message,UserId,ForumId")] Post post)
+        public async Task<IActionResult> Create(int forumid, Post post)
         {
+
             ModelState.Remove("User");
+            ModelState.Remove("UserId");
+            ModelState.Remove("ForumId");
             if (ModelState.IsValid)
             {
                 _context.Add(post);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Forums", new { id = post.ForumId });
             }
-            ViewData["ForumId"] = new SelectList(_context.Forums, "ForumId", "Description", post.ForumId);
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", post.UserId);
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+            ViewData["ForumId"] = forumid;
+            ViewData["UserId"] = user.Id;
             return View(post);
+
         }
 
         // GET: Posts/Edit/5
@@ -113,8 +120,6 @@ namespace Readdit.Controllers
             {
                 return NotFound();
             }
-            ViewData["ForumId"] = new SelectList(_context.Forums, "ForumId", "Description", post.ForumId);
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", post.UserId);
             return View(post);
         }
 
@@ -131,6 +136,7 @@ namespace Readdit.Controllers
             }
 
             ModelState.Remove("User");
+            ModelState.Remove("UserId");
             if (ModelState.IsValid)
             {
                 try
@@ -149,10 +155,8 @@ namespace Readdit.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Forums", new { id = post.ForumId });
             }
-            ViewData["ForumId"] = new SelectList(_context.Forums, "ForumId", "Description", post.ForumId);
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", post.UserId);
             return View(post);
         }
 
