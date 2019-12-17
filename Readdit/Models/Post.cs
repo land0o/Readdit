@@ -17,6 +17,7 @@ namespace Readdit.Models
 
         [Required]
         public string Title { get; set; }
+
         [Required]
         public string Message { get; set; }
 
@@ -24,7 +25,7 @@ namespace Readdit.Models
         public string UserId { get; set; }
         [Required]
         public ApplicationUser User { get; set; }
-        public virtual Forum Forum { get; set; }
+        public Forum Forum { get; set; }
         public int ForumId { get; set; }
         public virtual IEnumerable<PostReply> PostReplies { get; set; }
         //public ICollection<PostLike> PostLikes { get; set; }

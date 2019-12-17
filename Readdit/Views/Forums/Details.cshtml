@@ -4,51 +4,68 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h2>Forum about @Model.Title</h2>
+<hr />
 
 <div>
-    <h4>Forum</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DateCreated)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DateCreated)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.User)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.User.FullName)
-        </dd>
-    </dl>
-</div>
-<div>
-    @if (Model.UserId == @ViewBag.CurentUserId)
-    {
-        <div>
-            <a asp-action="Edit" asp-route-id="@Model.ForumId">Edit</a> |
-            <a asp-action="Index">Back to List</a>
+    <div class="card mb-3">
+        <img src="..." class="card-img-top" alt="...">
+        <div class="card-body">
+            <h5 class="card-title">@Model.Title</h5>
+            <p class="card-text">@Model.Description.</p>
+            <p class="card-text">Created By: @Model.User.FullName</p>
+            <p class="card-text"><small class="text-muted">@Model.DateCreated</small></p>
+            @if (Model.UserId == @ViewBag.CurentUserId)
+            {
+                <div>
+                    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.ForumId">Edit</a>
+                    <a class="btn btn-primary" asp-action="Index">Back to Forums</a>
+                </div>
+            }
+            else
+            {
+                <div>
+                    <a class="btn btn-primary" asp-action="Index">Back to Forums</a>
+                </div>
+            }
         </div>
-    }
-    else
-    {
-        <div>
-            <a asp-action="Index">Back to List</a>
-        </div>
-    }
-</div>
+    </div>
+    <br />
 
+    <h2>Posts</h2>
+    <div>
+        <p>
+            <a asp-controller="Posts" asp-action="Create" asp-route-forumid="@Model.ForumId" >Create New</a>
+        </p>
+        @foreach (var item in Model.Posts)
+        {
+            <div class="card mb-3" style="max-width: 750px; max-height:275px;">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <img src="~/Images/@item.User.imageUrl" class="card-img" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Title</h5>
+                            <p class="card-text">@item.Message</p>
+                            <p class="card-text">@item.DateCreated</p>
+                            <p class="card-text">@item.User.FullName</p>
+                            <p class="card-text"><small class="text-muted">@Model.DateCreated</small></p>
+                            @if (item.UserId == @ViewBag.CurentUserId)
+                            {
+                                <a class="btn btn-primary" asp-controller="Posts" asp-action="Edit" asp-route-id="@item.PostId">Edit</a>
+                                <a class="btn btn-primary" asp-controller="Posts" asp-action="Details" asp-route-id="@item.PostId">Reply</a>
+                                <a class="btn btn-primary" asp-controller="Posts" asp-action="Delete" asp-route-id="@item.PostId">Delete</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-primary" asp-controller="Posts" asp-action="Details" asp-route-id="@item.PostId">Reply</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+</div>
