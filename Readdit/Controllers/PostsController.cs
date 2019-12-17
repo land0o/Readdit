@@ -56,6 +56,13 @@ namespace Readdit.Controllers
         // GET: Posts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (currentUser != null)
+            {
+                ViewBag.CurentUserId = currentUser.Id;
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -188,7 +195,7 @@ namespace Readdit.Controllers
             var post = await _context.Posts.FindAsync(id);
             _context.Posts.Remove(post);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Forums", new { id = post.ForumId });
         }
 
         private bool PostExists(int id)
