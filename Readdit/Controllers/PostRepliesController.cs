@@ -11,49 +11,27 @@ using Readdit.Models;
 
 namespace Readdit.Controllers
 {
-    public class PostsController : Controller
+    public class PostRepliesController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
 
         private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
-        public PostsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public PostRepliesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
             _context = context;
         }
 
-        // GET: Posts for forum based off of Id
+        // GET: PostReplies
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Posts.Include(p => p.Forum).Include(p => p.User);
+            var applicationDbContext = _context.Replies.Include(p => p.Post).Include(p => p.User);
             return View(await applicationDbContext.ToListAsync());
         }
 
-        public async Task<IActionResult> ViewForumPost(Post postModel, int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var post = await _context.Posts.Where(post => post.PostId == id)
-                .Include(post => post.User)
-                .Include(post => post.Forum)
-                .Include(post => post.PostReplies)
-                                .ThenInclude(reply => reply.User)
-                .FirstOrDefaultAsync(m => m.PostId == id);
-
-            if (post == null)
-            {
-                return NotFound();
-            }
-
-            return View(post);
-        }
-
-        // GET: Posts/Details/5
+        // GET: PostReplies/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             var currentUser = await _userManager.GetUserAsync(HttpContext.User);
@@ -68,54 +46,52 @@ namespace Readdit.Controllers
                 return NotFound();
             }
 
-            var post = await _context.Posts
-                .Include(p => p.Forum)
+            var postReply = await _context.Replies
+                .Include(p => p.Post)
                 .Include(p => p.User)
-                .Include(p => p.PostReplies).ThenInclude(PostReplies => PostReplies.User)
-                .FirstOrDefaultAsync(m => m.PostId == id);
-            if (post == null)
+                .FirstOrDefaultAsync(m => m.PostReplyId == id);
+            if (postReply == null)
             {
                 return NotFound();
             }
 
-            return View(post);
+            return View(postReply);
         }
 
-        // GET: Posts/Create
-        public async Task<IActionResult> Create(int forumid)
+        // GET: PostReplies/Create
+        public async Task<IActionResult> Create(int postid)
         {
             var user = await _userManager.GetUserAsync(HttpContext.User);
 
-            ViewData["ForumId"] = forumid;
+            ViewData["PostId"] = postid;
             ViewData["UserId"] = user.Id;
             return View();
         }
 
-        // POST: Posts/Create
+        // POST: PostReplies/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int forumid, Post post)
+        public async Task<IActionResult> Create(int postid, PostReply postReply)
         {
 
             ModelState.Remove("User");
             ModelState.Remove("UserId");
-            ModelState.Remove("ForumId");
+            ModelState.Remove("PostId");
             if (ModelState.IsValid)
             {
-                _context.Add(post);
+                _context.Add(postReply);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Details", "Forums", new { id = post.ForumId });
+                return RedirectToAction("Details", "Posts", new { id = postReply.PostId });
             }
             var user = await _userManager.GetUserAsync(HttpContext.User);
-            ViewData["ForumId"] = forumid;
+            ViewData["PostId"] = postid;
             ViewData["UserId"] = user.Id;
-            return View(post);
-
+            return View(postReply);
         }
 
-        // GET: Posts/Edit/5
+        // GET: PostReplies/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -123,38 +99,38 @@ namespace Readdit.Controllers
                 return NotFound();
             }
 
-            var post = await _context.Posts.FindAsync(id);
-            if (post == null)
+            var postReply = await _context.Replies.FindAsync(id);
+            if (postReply == null)
             {
                 return NotFound();
             }
-            return View(post);
+            ViewData["PostId"] = new SelectList(_context.Posts, "PostId", "Message", postReply.PostId);
+            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", postReply.UserId);
+            return View(postReply);
         }
 
-        // POST: Posts/Edit/5
+        // POST: PostReplies/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PostId,DateCreated,Title,Message,UserId,ForumId")] Post post)
+        public async Task<IActionResult> Edit(int id, [Bind("PostReplyId,DateCreated,Message,PostId,UserId")] PostReply postReply)
         {
-            if (id != post.PostId)
+            if (id != postReply.PostReplyId)
             {
                 return NotFound();
             }
 
-            ModelState.Remove("User");
-            ModelState.Remove("UserId");
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(post);
+                    _context.Update(postReply);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PostExists(post.PostId))
+                    if (!PostReplyExists(postReply.PostReplyId))
                     {
                         return NotFound();
                     }
@@ -163,12 +139,14 @@ namespace Readdit.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Details", "Forums", new { id = post.ForumId });
+                return RedirectToAction(nameof(Index));
             }
-            return View(post);
+            ViewData["PostId"] = new SelectList(_context.Posts, "PostId", "Message", postReply.PostId);
+            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", postReply.UserId);
+            return View(postReply);
         }
 
-        // GET: Posts/Delete/5
+        // GET: PostReplies/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -176,32 +154,32 @@ namespace Readdit.Controllers
                 return NotFound();
             }
 
-            var post = await _context.Posts
-                .Include(p => p.Forum)
+            var postReply = await _context.Replies
+                .Include(p => p.Post)
                 .Include(p => p.User)
-                .FirstOrDefaultAsync(m => m.PostId == id);
-            if (post == null)
+                .FirstOrDefaultAsync(m => m.PostReplyId == id);
+            if (postReply == null)
             {
                 return NotFound();
             }
 
-            return View(post);
+            return View(postReply);
         }
 
-        // POST: Posts/Delete/5
+        // POST: PostReplies/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var post = await _context.Posts.FindAsync(id);
-            _context.Posts.Remove(post);
+            var postReply = await _context.Replies.FindAsync(id);
+            _context.Replies.Remove(postReply);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Details", "Forums", new { id = post.ForumId });
+            return RedirectToAction(nameof(Index));
         }
 
-        private bool PostExists(int id)
+        private bool PostReplyExists(int id)
         {
-            return _context.Posts.Any(e => e.PostId == id);
+            return _context.Replies.Any(e => e.PostReplyId == id);
         }
     }
 }
