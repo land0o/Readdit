@@ -21,7 +21,7 @@
             <input type="hidden" asp-for="UserId" value="@Model.UserId" />
             <div class="form-group">
                 <label asp-for="Message" class="control-label"></label>
-                <input asp-for="Message" class="form-control" />
+                <textarea asp-for="Message" class="form-control" ></textarea>
                 <span asp-validation-for="Message" class="text-danger"></span>
             </div>
             <input type="hidden" asp-for="ForumId" value="@Model.ForumId" />
