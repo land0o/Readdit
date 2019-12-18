@@ -12,6 +12,7 @@ using Readdit.Models;
 
 namespace Readdit.Controllers
 {
+    [Authorize]
     public class ForumsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -58,6 +59,7 @@ namespace Readdit.Controllers
             var forum = await _context.Forums
                 .Include(f => f.User)
                 .Include(f => f.Posts)
+                .Include(p => p.Posts).ThenInclude(Posts => Posts.User)
                 .FirstOrDefaultAsync(m => m.ForumId == id);
 
             var post = await _context.Posts.Where(post => post.PostId == id)
