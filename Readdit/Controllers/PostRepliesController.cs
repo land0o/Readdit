@@ -94,6 +94,8 @@ namespace Readdit.Controllers
         // GET: PostReplies/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var user = await _userManager.GetUserAsync(HttpContext.User);
+
             if (id == null)
             {
                 return NotFound();
@@ -105,7 +107,7 @@ namespace Readdit.Controllers
                 return NotFound();
             }
             ViewData["PostId"] = new SelectList(_context.Posts, "PostId", "Message", postReply.PostId);
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", postReply.UserId);
+            ViewData["UserId"] = user.Id;
             return View(postReply);
         }
 
@@ -114,13 +116,15 @@ namespace Readdit.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PostReplyId,DateCreated,Message,PostId,UserId")] PostReply postReply)
+        public async Task<IActionResult> Edit(int id, PostReply postReply)
         {
             if (id != postReply.PostReplyId)
             {
                 return NotFound();
             }
 
+            ModelState.Remove("User");
+            ModelState.Remove("UserId");
             if (ModelState.IsValid)
             {
                 try
@@ -139,7 +143,7 @@ namespace Readdit.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Posts", new { id = postReply.PostId });
             }
             ViewData["PostId"] = new SelectList(_context.Posts, "PostId", "Message", postReply.PostId);
             ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", postReply.UserId);
@@ -174,7 +178,7 @@ namespace Readdit.Controllers
             var postReply = await _context.Replies.FindAsync(id);
             _context.Replies.Remove(postReply);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Posts", new { id = postReply.PostId });
         }
 
         private bool PostReplyExists(int id)

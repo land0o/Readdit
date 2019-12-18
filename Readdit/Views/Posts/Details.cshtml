@@ -4,35 +4,35 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Replies to @Model.Title</h1>
-
 <div>
-    <h4>Post Replies</h4>
-    <hr />
     <div class="card w-75">
         <div class="card-body">
-            <h5 class="card-title">@Model.Title</h5>
-            <p class="card-text">@Model.Message.</p>
+            <h4>Post Replies</h4>
+            <hr />
+            <h5 class="card-title">Replies to @Model.Title</h5>
+            <p class="card-text">@Model.Message</p>
             <p class="card-text">@Model.DateCreated By: @Model.User.FullName</p>
             @if (Model.UserId == @ViewBag.CurentUserId)
             {
                 <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.PostId">Edit</a>
                 <a class="btn btn-primary" href="javascript:history.go(-1)">Back to Previous Posts</a>
+                <a class="btn btn-primary" asp-controller="PostReplies" asp-action="Create" asp-route-postid="@Model.PostId">Post a Reply</a>
             }
             else
             {
                 <a class="btn btn-primary" href="javascript:history.go(-1)">Back to Previous Posts</a>
+                <a class="btn btn-primary" asp-controller="PostReplies" asp-action="Create" asp-route-postid="@Model.PostId">Post a Reply</a>
             }
         </div>
     </div>
-
+    <br />
     <div>
-        <p>
+        @*<p>
             <a class="btn btn-primary" asp-controller="PostReplies" asp-action="Create" asp-route-postid="@Model.PostId">Post a Reply</a>
-        </p>
+        </p>*@
         @foreach (var item in Model.PostReplies)
         {
-            <div class="card mb-3" style="max-width: 750px; max-height:275px;">
+            <div class="card mb-3" style="max-width:500px; max-height:275px;">
                 <div class="row no-gutters">
                     <div class="col-md-4">
                         <img src="~/Images/@item.User.imageUrl" class="card-img" alt="...">
@@ -45,8 +45,8 @@
                             <p class="card-text"><small class="text-muted">@Model.DateCreated</small></p>
                             @if (item.UserId == @ViewBag.CurentUserId)
                             {
-                                <a class="btn btn-primary" asp-controller="Posts" asp-action="Edit" asp-route-id="@item.PostId">Edit</a>
-                                <a class="btn btn-primary" asp-controller="Posts" asp-action="Delete" asp-route-id="@item.PostId">Delete</a>
+                                <a class="btn btn-primary" asp-controller="PostReplies" asp-action="Edit" asp-route-id="@item.PostReplyId">Edit</a>
+                                <a class="btn btn-primary" asp-controller="PostReplies" asp-action="Delete" asp-route-id="@item.PostReplyId">Delete</a>
                             }
                            
                         </div>
