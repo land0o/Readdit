@@ -23,6 +23,7 @@ namespace Readdit.Models
 
         [Required]
         public string UserId { get; set; }
+
         [Required]
         public ApplicationUser User { get; set; }
         public Forum Forum { get; set; }

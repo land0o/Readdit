@@ -22,6 +22,6 @@ namespace Readdit.Models
 
         [Required]
         public ApplicationUser User { get; set; }
-        public virtual Post Post { get; set; }
+        public Post Post { get; set; }
     }
 }
