@@ -12,7 +12,6 @@ namespace Readdit
 {
     public class Startup
     {
-        private string _goodreadsApiKey = null;
         private string _goodreadsApiSecret = null;
         public Startup(IConfiguration configuration)
         {
@@ -24,7 +23,6 @@ namespace Readdit
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            _goodreadsApiKey = Configuration["ApiKey"];
             _goodreadsApiSecret = Configuration["ApiSecret"];
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
@@ -34,10 +32,9 @@ namespace Readdit
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.AddHttpClient("Goodreads", g => {
-                g.BaseAddress = new Uri($"https://www.goodreads.com/search/index.xml?key={_goodreadsApiKey}");
-                g.DefaultRequestHeaders.Add("Accept", "application/json");
-                g.DefaultRequestHeaders.Add("Header", "_goodreadsApiSecret");
-                g.DefaultRequestHeaders.Add("Header", "_goodreadsApiKey");
+                g.BaseAddress = new Uri($"https://www.goodreads.com/search/index.xml");
+                g.DefaultRequestHeaders.Add("Accept", "application/xml");
+                g.DefaultRequestHeaders.Add("secret", $"{_goodreadsApiSecret}");
             });
         }
 

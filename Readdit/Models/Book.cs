@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Readdit.Models.BooksViewModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Readdit.Models
 {
@@ -29,5 +30,6 @@ namespace Readdit.Models
 
         [Required]
         public ApplicationUser User { get; set; }
+        
     }
 }
