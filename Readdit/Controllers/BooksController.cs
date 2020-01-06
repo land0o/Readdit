@@ -39,7 +39,7 @@ namespace Readdit.Controllers
             var applicationDbContext = _context.Books.Include(b => b.User);
             return View(await applicationDbContext.ToListAsync());
         }
-        public async Task<IActionResult> Search(string SearchString, Response responseView)
+        public async Task<IActionResult> Search(string SearchString)
         {
             _goodreadsApiKey = Configuration["ApiKey"];
             var request = new HttpRequestMessage(HttpMethod.Get, $"?key={_goodreadsApiKey}&q={SearchString}");
@@ -47,36 +47,30 @@ namespace Readdit.Controllers
             var response = await client.SendAsync(request);
             var bookXmlString = await response.Content.ReadAsStringAsync();
 
-            XmlDocument bookAsXML = new XmlDocument();
-            bookAsXML.LoadXml(bookXmlString);
+             XmlDocument bookAsXML = new XmlDocument();
+             bookAsXML.LoadXml(bookXmlString);
 
             var BookJson = JsonConvert.SerializeXmlNode(bookAsXML, Newtonsoft.Json.Formatting.Indented);
 
-            var deserializedBooks = JsonConvert.DeserializeObject<GoodreadsResponse>(BookJson);
+            var deserializedBooks = JsonConvert.DeserializeObject<Rootobject>(BookJson); 
 
             List<Book> searchedBooks = new List<Book>();
+            var responseArray = deserializedBooks.GoodreadsResponse.search.results;
 
-            foreach (var book in deserializedBooks.Search)
+            foreach (var book in responseArray.work)
             {
                 Book newBook = new Book
-                 {
-                    Title = book.Results.Work.Best_Book.Title
+                {
+                    Title = book.best_book.title,
+                    Author = book.best_book.author.name,
+                    imageUrl = book.best_book.image_url
                 };
                 searchedBooks.Add(newBook);
             }
-
-            //XmlSerializer serializer = new XmlSerializer(typeof(GoodreadsResponse), new XmlRootAttribute("GoodreadsResponse"));
-
-            //GoodreadsResponse goodreadsResponse = null;
-
-            //StringReader stringReader = new StringReader(bookXmlString);
-            //goodreadsResponse = serializer.Deserialize(stringReader) as GoodreadsResponse;
-            //stringReader.Close();
+           
 
 
-
-
-            return View(responseView);
+            return View(searchedBooks);
         }
 
         // GET: Books/Details/5

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Readdit.Models.BooksViewModel
+namespace Readdit.Models.BooksViewModel.ClassesIMade
 {
     [Serializable]
     public class Author

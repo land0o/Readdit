@@ -1,5 +1,9 @@
-﻿using Readdit.Models.BooksViewModel;
+﻿using Newtonsoft.Json;
+using Readdit.Models.BooksViewModel;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Serialization;
 
 namespace Readdit.Models
 {
@@ -30,6 +34,10 @@ namespace Readdit.Models
 
         [Required]
         public ApplicationUser User { get; set; }
-        
+
+        [NotMapped]
+        public List<Rootobject> Rootobject { get; set; }
+
+
     }
 }

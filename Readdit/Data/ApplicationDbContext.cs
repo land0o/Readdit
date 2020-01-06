@@ -68,9 +68,6 @@ namespace Readdit.Data
 
         }
 
-        public DbSet<Readdit.Models.BooksViewModel.BooksResponse> BooksResponse { get; set; }
-
-        public DbSet<Readdit.Models.BooksViewModel.Work> Work { get; set; }
 
     }
 }
