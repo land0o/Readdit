@@ -18,6 +18,7 @@ namespace Readdit.Models
         public string Title { get; set; }
 
         [Required]
+        [Display(Name = "Rating")]
         public string Description { get; set; }
 
         [Required]

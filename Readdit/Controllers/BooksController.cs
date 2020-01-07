@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -21,26 +22,43 @@ namespace Readdit.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IHttpClientFactory _clientFactory;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private Task<ApplicationUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         private string _goodreadsApiKey = null;
 
         public IConfiguration Configuration { get; }
 
-        public BooksController(ApplicationDbContext context, IHttpClientFactory clientFactory, IConfiguration configuration)
+        public BooksController(ApplicationDbContext context, IHttpClientFactory clientFactory, IConfiguration configuration, UserManager<ApplicationUser> userManager)
         {
             _clientFactory = clientFactory;
             _context = context;
             Configuration = configuration;
+            _userManager = userManager;
         }
 
         // GET: user Books
         public async Task<IActionResult> Index()
         {
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (currentUser != null)
+            {
+                ViewBag.CurentUserId = currentUser.Id;
+            }
+
             var applicationDbContext = _context.Books.Include(b => b.User);
             return View(await applicationDbContext.ToListAsync());
         }
         public async Task<IActionResult> Search(string SearchString)
         {
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (currentUser != null)
+            {
+                ViewBag.CurentUserId = currentUser.Id;
+            }
+
             _goodreadsApiKey = Configuration["ApiKey"];
             var request = new HttpRequestMessage(HttpMethod.Get, $"?key={_goodreadsApiKey}&q={SearchString}");
             var client = _clientFactory.CreateClient("Goodreads");
@@ -62,8 +80,11 @@ namespace Readdit.Controllers
                 Book newBook = new Book
                 {
                     Title = book.best_book.title,
+                    GoodreadsId = book.id.ToString(),
                     Author = book.best_book.author.name,
-                    imageUrl = book.best_book.image_url
+                    Description = book.average_rating,
+                    imageUrl = book.best_book.image_url,
+                    UserId = currentUser.Id,
                 };
                 searchedBooks.Add(newBook);
             }
