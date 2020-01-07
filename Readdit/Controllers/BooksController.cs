@@ -80,7 +80,7 @@ namespace Readdit.Controllers
                 Book newBook = new Book
                 {
                     Title = book.best_book.title,
-                    GoodreadsId = book.id.ToString(),
+                    GoodreadsId = book.id.text,
                     Author = book.best_book.author.name,
                     Description = book.average_rating,
                     imageUrl = book.best_book.image_url,

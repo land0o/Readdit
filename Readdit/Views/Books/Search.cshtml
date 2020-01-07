@@ -22,9 +22,9 @@
     <thead>
         <tr>
             <th></th>
-            <th>
+            @*<th>
                 @Html.DisplayNameFor(model => model.GoodreadsId)
-            </th>
+            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.Title)
             </th>
@@ -43,9 +43,9 @@
             <td>
                 <img src="@item.imageUrl"/>
             </td>
-            <td>
+            @*<td>
                 @Html.DisplayFor(modelItem => item.GoodreadsId)
-            </td>
+            </td>*@
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
