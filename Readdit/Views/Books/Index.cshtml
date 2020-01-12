@@ -26,7 +26,7 @@
     @if (item.IsOwned =! false && item.IsWish == false)
     {
         @*1. need to render view based off if book is in wish list or if it is owned*@
-        <p>Bookshelf</p>
+        <h4>Bookshelf</h4>
         <table class="table table-hover table-bordered w-auto p-3">
             <thead>
                 <tr>
@@ -102,7 +102,7 @@
                         @if (item.UserId == @ViewBag.CurentUserId) 
                         { 
                             <a asp-action="Edit" asp-route-id="@bookItem.BookId">Edit</a> 
-                            <a asp-action="Delete" asp-route-id="@bookItem.BookId">Delete</a>
+                            <a asp-action="Delete" asp-route-id="@bookItem.BookId">Remove</a>
                         }
                     </td>
                     </tr>
@@ -114,7 +114,7 @@
     else if (item.IsWish == true && item.IsOwned == false)
     {
 
-        <p>Wish-List</p>
+        <h4>Wish-List</h4>
         <table class="table table-hover table-bordered w-auto p-3">
             <thead>
                 <tr>
@@ -181,7 +181,7 @@
                         @if (item.UserId == @ViewBag.CurentUserId)
                         {
                             <a asp-action="Edit" asp-route-id="@bookItem.BookId">Edit</a>
-                            <a asp-action="Delete" asp-route-id="@bookItem.BookId">Delete</a>
+                            <a asp-action="Delete" asp-route-id="@bookItem.BookId">Remove</a>
                         }
                     </td>
                     </tr>
