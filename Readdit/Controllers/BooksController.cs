@@ -38,7 +38,7 @@ namespace Readdit.Controllers
         }
 
         // GET: user Books
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(Book book)
         {
             var currentUser = await _userManager.GetUserAsync(HttpContext.User);
 
@@ -47,7 +47,8 @@ namespace Readdit.Controllers
                 ViewBag.CurentUserId = currentUser.Id;
             }
 
-            var applicationDbContext = _context.Books.Include(b => b.User);
+            var applicationDbContext = _context.Books.Include(b => b.User)
+                .Where(b => b.User == currentUser);
             return View(await applicationDbContext.ToListAsync());
         }
         public async Task<IActionResult> Search(string SearchString)
@@ -125,10 +126,20 @@ namespace Readdit.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BookId,GoodreadsId,Title,Description,Author,Isbn,imageUrl,IsRead,IsOwned,IsWish,UserId")] Book book)
+        public async Task<IActionResult> Create(Book book)
         {
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (currentUser != null)
+            {
+                ViewBag.CurentUserId = currentUser.Id;
+            }
+
+            ModelState.Remove("UserId");
+            ModelState.Remove("User");
             if (ModelState.IsValid)
             {
+                book.UserId = currentUser.Id;
                 _context.Add(book);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -159,15 +170,25 @@ namespace Readdit.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BookId,GoodreadsId,Title,Description,Author,Isbn,imageUrl,IsRead,IsOwned,IsWish,UserId")] Book book)
+        public async Task<IActionResult> Edit(int id, Book book)
         {
             if (id != book.BookId)
             {
                 return NotFound();
             }
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (currentUser != null)
+            {
+                ViewBag.CurentUserId = currentUser.Id;
+            }
+
+            ModelState.Remove("UserId");
+            ModelState.Remove("User");
 
             if (ModelState.IsValid)
             {
+                book.UserId = currentUser.Id;
                 try
                 {
                     _context.Update(book);

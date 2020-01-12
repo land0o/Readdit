@@ -38,27 +38,42 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                <img src="@item.imageUrl"/>
-            </td>
-            @*<td>
+        @foreach (var item in Model)
+        {
+        <form asp-action="Create" asp-controller="Books">
+            <tr>
+                <td>
+                    <img src="@item.imageUrl" />
+                </td>
+                @*<td>
                 @Html.DisplayFor(modelItem => item.GoodreadsId)
             </td>*@
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Author)
-            </td>
-            <td>
-                <a asp-action="index" asp-route-id="@item.BookId">Add</a>
-            </td>
-        </tr>
-}
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Author)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.BookId">Details</a>
+                    @*1. need to grab the info and submit it to the database on add*@
+
+                    @{var GoodreadsId = item.GoodreadsId;}
+                    @{var UserId = @ViewBag.CurentUserId;}
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" asp-for="@GoodreadsId" />
+                        <input type="hidden" class="form-control" asp-for="@UserId" />
+                    </div>
+                    <div class="form-group">
+                        <input class="btn btn-primary" type="submit" asp-route-id="@item.BookId" value="Add" />
+                    </div>
+                </td>
+            </tr>
+        </form>
+            
+        }
     </tbody>
 </table>
