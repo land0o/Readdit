@@ -10,15 +10,16 @@
         <div class="input-group-append">
             <input type="text" name="SearchString" class="form-control" placeholder="Search for a book by Book Title, Genre, Series or Author"
                    aria-label="" aria-describedby="button-addon2" size="55">
-            <input class="btn btn-outline-secondary" type="submit" value="Search" id="button-addon2" />
+            <input class="btn btn-outline-primary" type="submit" value="Search" id="button-addon2" />
         </div>
     </form>
 </div>
+<div>
+    <a class="btn btn-primary" asp-action="Index">Back to Books</a>
+</div>
+<br />
 
-<p>
-
-</p>
-<table class="table">
+<table class="table table-hover table-secondary text-primary table-bordered w-auto p-3">
     <thead>
         <tr>
             <th></th>
@@ -58,7 +59,6 @@
                     @Html.DisplayFor(modelItem => item.Author)
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.BookId">Details</a>
                     @*1. need to grab the info and submit it to the database on add*@
 
                     @{var GoodreadsId = item.GoodreadsId;}

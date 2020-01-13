@@ -32,15 +32,15 @@
         {
             <div class="card-body">
                 <a class="card-link btn btn-outline-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-                <a class="card-link btn btn-outline-primary" asp-controller="" asp-action="Index"> Books</a>
-                <a class="card-link btn btn-outline-primary" asp-controller="" asp-action="Index">Forum History</a>
+                <a class="card-link btn btn-outline-primary" asp-controller="Books" asp-action="Index"> Books</a>
+                @*<a class="card-link btn btn-outline-primary" asp-controller="" asp-action="Index">Forum History</a>*@
             </div>
         }
         else
         {
             <div class="card-body">
-                <a class="card-link btn btn-outline-primary" asp-controller="" asp-action="Index"> Books</a> 
-                <a class="card-link btn btn-outline-primary" asp-controller="" asp-action="Index">Forum History</a>
+                <a class="card-link btn btn-outline-primary" asp-controller="Books" asp-action="Index"> Books</a> 
+                @*<a class="card-link btn btn-outline-primary" asp-controller="" asp-action="Index">Forum History</a>*@
             </div>
         }
     </div>
