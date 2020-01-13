@@ -27,6 +27,8 @@ namespace Readdit.Models
 
             public string imageUrl { get; set; }
 
+            public int Rating { get; set; }
+
             public bool isAdmin { get; set; }
 
             [NotMapped]
