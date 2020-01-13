@@ -7,7 +7,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Readdit</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    @*<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />*@
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap2.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <script src="https://kit.fontawesome.com/7b42dc2270.js" crossorigin="anonymous"></script>
 </head>
@@ -15,7 +16,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-secondary border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Readdit</a>
+                <a class="navbar-brand text-primary" asp-area="" asp-controller="Home" asp-action="Index">Readdit</a>
                 @*<img src="~/Images/ReadditLogoNoBgBlue.png" alt="Site Logo" style="height:120px; width: 120px" />*@
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -27,13 +28,13 @@
                     {
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                <a class="nav-link text-primary text-uppercase" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="ApplicationUsers" asp-action="Details" asp-route-id="@ViewBag.CurentUserId">Profile</a>
+                                <a class="nav-link text-primary text-uppercase" asp-area="" asp-controller="ApplicationUsers" asp-action="Details" asp-route-id="@ViewBag.CurentUserId">Profile</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Forums" asp-action="Index">Forums</a>
+                                <a class="nav-link text-primary text-uppercase" asp-area="" asp-controller="Forums" asp-action="Index">Forums</a>
                             </li>
                         </ul>
                     }
@@ -41,10 +42,10 @@
                     {
                         <ul class="navbar-nav flex-grow-1">
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                <a class="nav-link text-primary text-uppercase" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Forums" asp-action="Index">Forums</a>
+                                <a class="nav-link text-primary text-uppercase" asp-area="" asp-controller="Forums" asp-action="Index">Forums</a>
                             </li>
                         </ul>
                     }
@@ -60,7 +61,7 @@
 
     <footer class="border-top bg-secondary footer">
         <div class="container">
-            &copy; 2019 - Readdit - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2020 - Readdit - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
