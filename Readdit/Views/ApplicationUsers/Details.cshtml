@@ -3,11 +3,21 @@
 @{
     ViewData["Title"] = "Details";
 }
+    @*<style type="text/css">
+        body {
+            background-image: url('/Images/book-close-up-color-decoration.jpg');
+            margin: 0;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            background-size: cover;
+        }
+    </style>*@
 
-<h1>My Profile</h1>
+<h1 style="text-align:center;" class="text-primary">My Profile</h1>
 
 <div style="text-align:center;">
-    <div class="card" style="width: 25rem;">
+    <div class="card border-primary" style="width: 25rem; margin:auto;">
         <img src="~/Images/@Model.imageUrl" class="card-img-top" alt="@Html.DisplayNameFor(model => model.imageUrl)">
         <div class="card-body">
             <h5 class="">@Html.DisplayNameFor(model => model.Description)</h5>
@@ -21,9 +31,15 @@
         @if (Model.Id == @ViewBag.CurentUserId)
         {
             <div class="card-body">
+<<<<<<< HEAD
                 <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
                 <a asp-controller="Books" asp-action="Index"> Books</a> |
                 <a asp-controller="" asp-action="Index">Forum History</a>
+=======
+                <a class="card-link btn btn-outline-primary" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+                <a class="card-link btn btn-outline-primary" asp-controller="" asp-action="Index"> Books</a>
+                <a class="card-link btn btn-outline-primary" asp-controller="" asp-action="Index">Forum History</a>
+>>>>>>> master
             </div>
         }
         else
