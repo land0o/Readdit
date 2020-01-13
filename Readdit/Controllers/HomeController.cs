@@ -43,6 +43,12 @@ namespace Readdit.Controllers
 
         public async Task<IActionResult> Search(string SearchString)
         {
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (currentUser != null)
+            {
+                ViewBag.CurentUserId = currentUser.Id;
+            }
             var applicationDbContext = _context.Forums.Where(f => f.Title.ToLower().Contains(SearchString) || f.Description.ToLower().Contains(SearchString));
 
             return View(await applicationDbContext.ToListAsync());
