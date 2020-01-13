@@ -8,53 +8,49 @@
 
 @if (Model.ToList().Count == 0)
 {
-<p>There are no results that match your search. Please enter a different Book Title, Genre, Series, Author or create new a Forum on the topic.</p>
-<div>
-    | <a asp-area="" asp-controller="Home" asp-action="Index">Home</a> |
-    <a asp-controller="Forums" asp-action="Index">Forums</a>
-</div>
+    <p>There are no results that match your search. Please enter a different Book Title, Genre, Series, Author or create new a Forum on the topic.</p>
+    <div>
+        | <a asp-area="" asp-controller="Home" asp-action="Index">Home</a> |
+        <a asp-controller="Forums" asp-action="Index">Forums</a>
+    </div>
 }
 else
 {
 
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+    <table class="table table-hover table-secondary text-primary table-bordered w-auto p-3">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DateCreated)
-                </td>
-                <td>
-                    <a href=@Url.Action("Details", "Forums", new { Id = item.ForumId })>@item.Title</a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateCreated)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th></th>
             </tr>
-            <tr>
-                <td>
-                    <div>
-                        <a asp-controller="Forums" asp-action="Index">Forums</a>
-                    </div>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DateCreated)
+                    </td>
+                    <td>
+                        <a href=@Url.Action("Details", "Forums", new { Id = item.ForumId })>@item.Title</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div>
+        <a asp-controller="Forums" asp-action="Index">Forums</a>
+    </div>
 }
