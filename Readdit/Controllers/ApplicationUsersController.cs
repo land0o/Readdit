@@ -136,6 +136,16 @@ namespace Bangazon.Controllers
                         user.Description = UserViewModel.User.Description;
                         user.City = UserViewModel.User.City;
                         user.Email = UserViewModel.User.Email;
+                        //add's a unique string to the end of the file name
+                        var UniqueFileName = GetUniqueFileName(UserViewModel.image.FileName);
+                        //saves the image in the Images folder
+                        var uploads = Path.Combine(_hostingEnvironment.WebRootPath, "Images");
+                        var filePath = Path.Combine(uploads, UniqueFileName);
+                        using (var myFile = new FileStream(filePath, FileMode.Create))
+                        {
+                            UserViewModel.image.CopyTo(myFile);
+                        }
+                        user.imageUrl = UniqueFileName;
                     }
 
                     var UserDetails = UserViewModel.User.Id;
