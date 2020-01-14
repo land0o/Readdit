@@ -80,8 +80,14 @@ namespace Readdit.Controllers
 
         [Authorize]
         // GET: Forums/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (currentUser != null)
+            {
+                ViewBag.CurentUserId = currentUser.Id;
+            }
             //ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id");
             return View();
         }
@@ -93,6 +99,13 @@ namespace Readdit.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Forum forum)
         {
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (currentUser != null)
+            {
+                ViewBag.CurentUserId = currentUser.Id;
+            }
+
             ModelState.Remove("UserId");
             ModelState.Remove("User");
 
@@ -176,6 +189,13 @@ namespace Readdit.Controllers
         // GET: Forums/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (currentUser != null)
+            {
+                ViewBag.CurentUserId = currentUser.Id;
+            }
+
             if (id == null)
             {
                 return NotFound();

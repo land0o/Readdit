@@ -27,7 +27,11 @@ namespace Readdit.Models
         public string imageUrl { get; set; }
 
         public bool IsRead { get; set; }
+
+        [Display(Name = "Owned")]
         public bool IsOwned { get; set; }
+
+        [Display(Name = "WishList")]
         public bool IsWish { get; set; }
 
         [Required]

@@ -47,11 +47,13 @@ namespace Readdit.Controllers
                 ViewBag.CurentUserId = currentUser.Id;
             }
 
+            //ViewBag.
+
             var applicationDbContext = _context.Books.Include(b => b.User)
                 .Where(b => b.User == currentUser);
             return View(await applicationDbContext.ToListAsync());
         }
-        public async Task<IActionResult> Search(string SearchString)
+        public async Task<IActionResult> Search(string SearchString, Book novel)
         {
             var currentUser = await _userManager.GetUserAsync(HttpContext.User);
 
@@ -74,6 +76,29 @@ namespace Readdit.Controllers
             var deserializedBooks = JsonConvert.DeserializeObject<Rootobject>(BookJson); 
 
             List<Book> searchedBooks = new List<Book>();
+
+            if (searchedBooks.Count() != 0)
+            {
+                var SingleResponse = deserializedBooks.GoodreadsResponse.search.results.work[0];
+
+                ModelState.Remove("UserId");
+                ModelState.Remove("User");
+                if (ModelState.IsValid)
+                {
+                    novel.UserId = currentUser.Id;
+                    novel.Title = SingleResponse.best_book.title;
+                    novel.GoodreadsId = SingleResponse.id.text;
+                    novel.Author = SingleResponse.best_book.author.name;
+                    novel.Description = SingleResponse.average_rating;
+                    novel.imageUrl = SingleResponse.best_book.image_url;
+                    _context.Add(novel);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+
+            }
+            
+
             var responseArray = deserializedBooks.GoodreadsResponse.search.results;
 
             foreach (var book in responseArray.work)
@@ -89,10 +114,30 @@ namespace Readdit.Controllers
                 };
                 searchedBooks.Add(newBook);
             }
-           
-
 
             return View(searchedBooks);
+        }
+        public async Task<IActionResult> SaveBooks(Book book)
+        {
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (currentUser != null)
+            {
+                ViewBag.CurentUserId = currentUser.Id;
+            }
+
+            ModelState.Remove("UserId");
+            ModelState.Remove("User");
+            if (ModelState.IsValid)
+            {
+                book.UserId = currentUser.Id;
+                book.IsWish = true;
+                _context.Add(book);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", book.UserId);
+            return View(book);
         }
 
         // GET: Books/Details/5
