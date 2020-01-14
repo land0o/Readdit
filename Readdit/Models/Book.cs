@@ -1,4 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using Readdit.Models.BooksViewModel;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Xml.Serialization;
 
 namespace Readdit.Models
 {
@@ -13,6 +18,7 @@ namespace Readdit.Models
         public string Title { get; set; }
 
         [Required]
+        [Display(Name = "Rating")]
         public string Description { get; set; }
 
         [Required]
@@ -21,7 +27,11 @@ namespace Readdit.Models
         public string imageUrl { get; set; }
 
         public bool IsRead { get; set; }
+
+        [Display(Name = "Owned")]
         public bool IsOwned { get; set; }
+
+        [Display(Name = "WishList")]
         public bool IsWish { get; set; }
 
         [Required]
@@ -29,5 +39,10 @@ namespace Readdit.Models
 
         [Required]
         public ApplicationUser User { get; set; }
+
+        [NotMapped]
+        public List<Rootobject> Rootobject { get; set; }
+
+
     }
 }

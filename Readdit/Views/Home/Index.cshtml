@@ -16,31 +16,45 @@
         }
     </style>
 <div class="text-center jumbotron" style=" border-radius: 5%; margin-bottom: 65px;">
-    <h1 
-    class="display-2 text-primary"
-    @*style="color: white;
-    background:#868e96;
-    border: 2px solid black;
-    border-radius: 2%;
-    width:45%;
-    height:45%;
-    margin:auto;
-    font-family: 'Arial, Helvetica, sans-serif';
-    font-size: 500%;"*@
-        >
-        Welcome
-    </h1>
-    <img src="~/Images/ReadditLogoNoBgBlue.png" alt="Site Logo" style="height:500px; width: 500px" /> <br />
-    <div class="input-group mb-3">
-        <form asp-controller="Home" asp-action="Search" method="get" style="margin:auto;">
-            <div class="input-group-append">
-                <input type="text" name="SearchString" class="form-control" placeholder="Search for a forum by Book Title, Genre, Series or Author"
-                       aria-label="" aria-describedby="button-addon2" size="55">
-                <input style="z-index:0;" class="btn btn-outline-primary" type="submit" value="Search" id="button-addon2" />
-            </div>
-        </form>
+    <div style="
+            background-image: url('/Images/book-close-up-color-decoration.jpg');
+            margin: 0;
+            z-index:-1;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            background-size: cover;">
+        <br />
+        <div style="
+            background:#4E5D6C;
+            border: 2px solid black;
+            border-radius: 2%;
+            width:45%;
+            height:30%;
+            margin:auto;
+            ">
+            <h1 class="display-2 text-primary"
+                style=" margin:auto;
+                    font-family: 'Arial, Helvetica, sans-serif';
+                    font-size: 400%;">
+                Welcome
+            </h1>
+
+        </div>
+        @*end of header div*@
+        <img src="~/Images/ReadditLogoNoBgBlue.png" alt="Site Logo" style="height:500px; width: 500px" /> <br />
+        <div class="input-group mb-3">
+            <form asp-controller="Home" asp-action="Search" method="get" style="margin:auto;">
+                <div class="input-group-append">
+                    <input type="text" name="SearchString" class="form-control" placeholder="Search for a forum by Book Title, Genre, Series or Author"
+                           aria-label="" aria-describedby="button-addon2" size="55">
+                    <input style="z-index:0;" class="btn btn-primary" type="submit" value="Search" id="button-addon2" />
+                </div>
+            </form>
+        </div>
     </div>
-    <table class="table">
+    @*end of photo div*@
+    <table class="table table-hover table-secondary text-primary table-bordered w-auto p-3" style="margin:auto;">
         <thead>
             <tr>
                 <th>

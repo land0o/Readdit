@@ -6,11 +6,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Readdit.Models;
+using System;
 
 namespace Readdit
 {
     public class Startup
     {
+        private string _goodreadsApiSecret = null;
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -21,6 +23,7 @@ namespace Readdit
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            _goodreadsApiSecret = Configuration["ApiSecret"];
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
@@ -28,6 +31,11 @@ namespace Readdit
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddHttpClient("Goodreads", g => {
+                g.BaseAddress = new Uri($"https://www.goodreads.com/search/index.xml");
+                g.DefaultRequestHeaders.Add("Accept", "application/xml");
+                g.DefaultRequestHeaders.Add("secret", $"{_goodreadsApiSecret}");
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

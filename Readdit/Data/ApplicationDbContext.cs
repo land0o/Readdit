@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Readdit.Models;
+using Readdit.Models.BooksViewModel;
 
 namespace Readdit.Data
 {
@@ -66,6 +67,7 @@ namespace Readdit.Data
             modelBuilder.Entity<ApplicationUser>().HasData(user);
 
         }
+
 
     }
 }

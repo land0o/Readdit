@@ -1,0 +1,82 @@
+﻿@model IEnumerable<Readdit.Models.Book>
+
+@{
+    ViewData["Title"] = "Search";
+}
+
+<h1>Search</h1>
+<div class="input-group mb-3">
+    <form asp-controller="Books" asp-action="Search" method="get" style="margin:auto;">
+        <div class="input-group-append">
+            <input type="text" name="SearchString" class="form-control" placeholder="Search for a book by Book Title, Genre, Series or Author"
+                   aria-label="" aria-describedby="button-addon2" size="55">
+            <input class="btn btn-outline-primary" type="submit" value="Search" id="button-addon2" />
+        </div>
+    </form>
+</div>
+<div>
+    <a class="btn btn-primary" asp-action="Index">Back to Books</a>
+</div>
+<br />
+
+<table class="table table-hover table-secondary text-primary table-bordered w-auto p-3">
+    <thead>
+        <tr>
+            <th></th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.GoodreadsId)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Author)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="form-group">
+                    <img src="@item.imageUrl" />
+                </td>
+                @*<td>
+                @Html.DisplayFor(modelItem => item.GoodreadsId)
+            </td>*@
+                <td class="form-group">
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td class="form-group">
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td class="form-group">
+                    @Html.DisplayFor(modelItem => item.Author)
+                </td>
+                <td>
+                    @*1. need to grab the info and submit it to the database on add*@
+        <form asp-action="SaveBooks" asp-controller="Books" name="book" method="post">
+
+                    @*@{var imageUrl = item.imageUrl;}
+                    @{var UserId = @ViewBag.CurentUserId;}*@
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="imageUrl" value="@item.imageUrl" />
+                        <input type="hidden" class="form-control" name="Title" value="@item.Title" />
+                        <input type="hidden" class="form-control" name="Author" value="@item.Author" />
+                        <input type="hidden" class="form-control" name="Description" value="@item.Description" />
+                    </div>
+                    <div class="form-group">
+                        <input  asp-action="SaveBooks" asp-controller="Books"
+                               class="btn btn-primary" type="submit" asp-route-id="@item" value="Add" />
+                    </div>
+        </form>
+                </td>
+            </tr>
+            
+        }
+    </tbody>
+</table>
